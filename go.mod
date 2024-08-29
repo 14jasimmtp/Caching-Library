@@ -1,4 +1,4 @@
-module github.com/14jasimmtp/Caching-Library/cache
+module github.com/14jasimmtp/Caching-Library
 
 go 1.23.0
 
