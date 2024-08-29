@@ -10,8 +10,8 @@ type memcached struct {
 	client *memcache.Client
 }
 
-func NewMemcachedCache(server ...string) *memcached {
-	return &memcached{client: memcache.New(server...)}
+func NewMemcachedCache(server string) *memcached {
+	return &memcached{client: memcache.New(server)}
 }
 
 func (c *memcached) Set(key string, value []byte, ttl time.Duration) error {
