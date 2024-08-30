@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/copier"
 )
 
-type rs struct {
+type Rs struct {
 	Client *redis.Client
 }
 
@@ -22,21 +22,21 @@ type RedisOptions struct {
 func NewRedisCache(opt *RedisOptions) Methods {
 	RO:=redis.Options{}
 	copier.Copy(&RO,&opt)
-	return &rs{Client: redis.NewClient(&RO)}
+	return &Rs{Client: redis.NewClient(&RO)}
 }
 
-func (c *rs) Set(key string, value interface{}, ttl time.Duration) error {
+func (c *Rs) Set(key string, value interface{}, ttl time.Duration) error {
 	return c.Client.Set(c.Client.Context(), key, value, ttl).Err()
 }
 
-func (c *rs) Get(key string) (any, error) {
+func (c *Rs) Get(key string) (any, error) {
 	return c.Client.Get(c.Client.Context(), key).Result()
 }
 
-func (c *rs) Delete(key string) error {
+func (c *Rs) Delete(key string) error {
 	return c.Client.Del(c.Client.Context(), key).Err()
 }
 
-func (c *rs) Clear() {
+func (c *Rs) Clear() {
 	c.Client.FlushDB(c.Client.Context())
 }

@@ -3,6 +3,7 @@ package cache
 import (
 	"container/list"
 	"errors"
+	_ "net/http/pprof"
 	"sync"
 	"time"
 )
@@ -28,19 +29,22 @@ func NewInMemoryCache(Size int) Methods {
 	}
 
 	go cache.ExpiryWorker()
-
 	return cache
 
 }
 
 func (c *inMemory) Set(key string, value interface{}, ttl time.Duration) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if elem, found := c.Cache[key]; found {
+	c.mu.RLock()
+	elem, found := c.Cache[key]
+	c.mu.RUnlock()
+	if found {
+		c.mu.Lock()
 		elem.Value.(*node).Value = value
 		elem.Value.(*node).TTL = time.Now().Add(ttl)
 		c.DDL.MoveToFront(elem)
+		c.mu.Unlock()
 	} else {
+		c.mu.Lock()
 		if c.DDL.Len() == c.Size {
 			last := c.DDL.Back()
 			delete(c.Cache, last.Value.(*node).Key)
@@ -49,6 +53,7 @@ func (c *inMemory) Set(key string, value interface{}, ttl time.Duration) error {
 		node := &node{Key: key, Value: value, TTL: time.Now().Add(ttl)}
 		element := c.DDL.PushFront(node)
 		c.Cache[key] = element
+		c.mu.Unlock()
 	}
 	return nil
 }
