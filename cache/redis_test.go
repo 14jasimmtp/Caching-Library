@@ -28,7 +28,7 @@ func TestRedisIntegrationTest(t *testing.T) {
 
 }
 
-func TestSet(t *testing.T) {
+func TestRedisSet(t *testing.T) {
 	db, mock := redismock.NewClientMock()
 	cache := &Rs{Client: db}
 
@@ -43,7 +43,7 @@ func TestSet(t *testing.T) {
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
-func TestGet(t *testing.T) {
+func TestRedisGet(t *testing.T) {
 	db, mock := redismock.NewClientMock()
 	cache := &Rs{Client: db}
 
@@ -58,7 +58,7 @@ func TestGet(t *testing.T) {
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
-func TestDelete(t *testing.T) {
+func TestRedisDelete(t *testing.T) {
 	db, mock := redismock.NewClientMock()
 	cache := &Rs{Client: db}
 
@@ -71,7 +71,7 @@ func TestDelete(t *testing.T) {
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
-func TestClear(t *testing.T) {
+func TestRedisClear(t *testing.T) {
 	db, mock := redismock.NewClientMock()
 	cache := &Rs{Client: db}
 
