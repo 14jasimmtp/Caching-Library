@@ -9,7 +9,7 @@ The Multi-Backend Caching Library in Go provides an efficient caching solution w
 To install the Multi-Backend Caching Library, use Go modules with the following command:
 
 ```sh
-go get github.com/yourusername/multi-backend-caching
+go get github.com/14jasimmtp/Caching-Library/cache
 ```
 
 ## Example Usage
@@ -22,18 +22,18 @@ package main
 import (
     "fmt"
     "time"
-    "github.com/yourusername/multi-backend-caching"
+    "github.com/14jasimmtp/Caching-Library/cache"
 )
 
 func main() {
     // Create a new in-memory cache instance
-    cache := caching.NewCache(100, time.Minute*10)
+    inMemory := cache.NewInMemoryCache(100)
 
     // Set a cache entry with a 5-minute expiration
-    cache.Set("key1", "value1", time.Minute*5)
+    inMemory.Set("key1", "value1", time.Minute*5)
 
     // Get a cache entry
-    value, found := cache.Get("key1")
+    value, found := inMemory.Get("key1")
     if found {
         fmt.Println("Cached value:", value)
     } else {
@@ -41,14 +41,14 @@ func main() {
     }
 
     // Delete a cache entry
-    cache.Delete("key1")
+    inMemory.Delete("key1")
 
     // Integrate with Redis
-    redisCache := caching.NewRedisCache("localhost:6379", "your-redis-password")
+    redisCache := cache.NewRedisCache(&cache.RedisOptions{Addr: "localhost:6379"})
     redisCache.Set("key2", "value2", time.Minute*5)
 
     // Integrate with Memcached
-    memcachedCache := caching.NewMemcachedCache("localhost:11211")
+    memcachedCache := cache.NewMemcachedCache("localhost:11211")
     memcachedCache.Set("key3", "value3", time.Minute*5)
 }
 ```
@@ -84,6 +84,12 @@ The library is designed with the following architecture:
 - `NewInMemoryCache(size int) *Cache`:
   Creates a new in-memory cache instance with a specified size and default expiration time.
 
+- `NewRedisCache(opt *cache.RedisOptions) *RedisCache`:
+  Creates a new Redis cache instance with the specified connection options.
+
+- `NewMemcachedCache(address string) *MemcachedCache`:
+  Creates a new Memcached cache instance with the specified address.
+
 - `Set(key string, value interface{}, expiration time.Duration)`:
   Sets a cache entry with an optional expiration time.
 
@@ -96,34 +102,31 @@ The library is designed with the following architecture:
 - `Clear()`:
   Clears all the cache entry.
 
-- `NewRedisCache(opt *cache.RedisOptions) *RedisCache`:
-  Creates a new Redis cache instance with the specified address and password.
-
-- `NewMemcachedCache(address string) *MemcachedCache`:
-  Creates a new Memcached cache instance with the specified address.
 
 # Benchmark Performance
 
 The library has been benchmarked to ensure high performance and efficiency. Here are some key performance metrics:
 
 1. In-Memory Cache Operations:
-   - Set operation: ~200,000 operations per second
-   - Get operation: ~250,000 operations per second
-   - Memory usage: ~0.1 MB per 100,000 entries
+   - Set operation: 9,350,178 operations per second (131.6 ns/op)
+   - Get operation: 60,978,828 operations per second (29.82 ns/op)
+   - Delete operation: 4,353,854 operations per second (341.0 ns/op)
+   - Clear operation: 3,105,248 operations per second (400.7 ns/op)
 
 2. Redis Integration:
    - Set operation: ~50,000 operations per second
    - Get operation: ~60,000 operations per second
 
 3. Memcached Integration:
-   - Set operation: ~70,000 operations per second
-   - Get operation: ~80,000 operations per second
+   - Set operation: 10,586 operations per second (131,638 ns/op)
+   - Get operation: 8,824 operations per second (152,160 ns/op)
+   - Delete operation: 5,371 operations per second (228,716 ns/op)
 
 These benchmarks highlight the library's ability to handle high-throughput caching scenarios efficiently.
 
 # Contributing
 
-Contributions are welcome! To contribute to the project, please submit issues or pull requests on the GitHub repository: github.com/14jasimmtp/multi-backend-caching.
+Contributions are welcome! To contribute to the project, please submit issues or pull requests on the GitHub repository: github.com/14jasimmtp/Caching-Library.
 
 # License
 
