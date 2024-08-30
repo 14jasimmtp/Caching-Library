@@ -10,17 +10,6 @@ To install the Multi-Backend Caching Library, use Go modules with the following 
 
 ```sh
 go get github.com/yourusername/multi-backend-caching
-
-Here's the content formatted in Markdown:
-
-# Usage
-
-## Importing the Library
-
-To use the library in your Go application, import it as follows:
-
-```go
-import "github.com/yourusername/multi-backend-caching"
 ```
 
 ## Example Usage
@@ -104,7 +93,10 @@ The library is designed with the following architecture:
 - `Delete(key string)`:
   Deletes a cache entry.
 
-- `NewRedisCache(address, password string) *RedisCache`:
+- `Clear()`:
+  Clears all the cache entry.
+
+- `NewRedisCache(opt *cache.RedisOptions) *RedisCache`:
   Creates a new Redis cache instance with the specified address and password.
 
 - `NewMemcachedCache(address string) *MemcachedCache`:
@@ -139,4 +131,4 @@ This library is licensed under the MIT License. See the LICENSE file for more de
 
 # Contact
 
-For questions or support, please reach out to your-email@example.com.
+For questions or support, please reach out to jasimmtp84@gmail.com.
